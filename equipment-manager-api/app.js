@@ -1,10 +1,12 @@
 const express = require('express')
+var cors = require('cors')
 const moment = require('moment')
 
 const app = express()
 const port = 3000
 
 app.use(express.json())
+app.use(cors())
 
 let equipment = []
 let equipment_state = []
@@ -35,7 +37,8 @@ const createMockData = () => {
       id: i,
       equipment_id: e.id,
       state: 'RED',
-      updated_at: moment().toString()
+      created_at: moment().toString(),
+      updated_at: null
     })
   });
 
@@ -64,36 +67,36 @@ const createMockData = () => {
       id: i,
       equipment_id: e.equipment_id,
       order: orders[Math.floor(Math.random() * 3)],
+      state: e.state,
       created_at: moment().toString(),
-      state: e.state
+      updated_at: null
     })
   })
 }
 
 createMockData();
 
-app.get('/', (req, res) => {
-  res.send('Hello World!')
-})
-
+// get all equipment state
 app.get('/equipment-state', (req, res) => {
   res.send(equipment_state)
 })
 
 // get equipment state
 app.get('/equipment-state/:id', (req, res) => {
-  res.send(equipment_assigned_orders.find(e => e.equipment_id = req.params.id))
+  res.send(equipment_assigned_orders.find(e => e.equipment_id == req.params.id))
 })
 
 // update equipment state
 app.post('/equipment-state/:id', (req, res) => {
   // in the equipment state table
-  index = equipment_state.findIndex(e => e.equipment_id = req.params.id)
+  index = equipment_state.findIndex(e => e.equipment_id == req.params.id)
   equipment_state[index].state = req.body.new_state
+  equipment_state[index].updated_at = moment().toString()
 
   // in the order table
-  orderIndex = equipment_assigned_orders.findIndex(o => o.equipment_id = req.params.id)
-  equipment_assigned_orders[index].state = req.body.new_state
+  orderIndex = equipment_assigned_orders.findIndex(o => o.equipment_id == req.params.id)
+  equipment_assigned_orders[orderIndex].state = req.body.new_state
+  equipment_assigned_orders[index].updated_at = moment().toString()
 
   res.send(equipment_assigned_orders[index])
 })
