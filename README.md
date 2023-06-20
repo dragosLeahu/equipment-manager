@@ -6,15 +6,17 @@ Manage production state of equipment.
 ![image info](./diagrams/system-diagram.png)
 
 ### Run
-First run equipment-manager-api and after that equipment-manager-mobile
+Run `equipment-manager-api` and after that `equipment-manager-mobile`
 
-Backend:
+#### Backend:
 
-cd equipment-manager-api
-npm install
-npm start
+    cd equipment-manager-api
+    npm install
+    npm start
 
-Frontend:
-cd equipment-manager-mobile
-npm install
-npx expo start
+#### Frontend:
+    cd equipment-manager-mobile
+    npm install
+    npx expo start
+
+Once a QR code appears and fronted code is ready, press `w` to open a local web session.
